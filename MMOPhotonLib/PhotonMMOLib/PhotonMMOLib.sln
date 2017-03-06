@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonMMOLib", "PhotonMMOLib\PhotonMMOLib.csproj", "{92D8F777-E014-48ED-96F0-5C0CE8323D66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMOPhotonClinet.CSharp", "..\..\MMOPhotonClinet\MMOPhotonClinet.CSharp.csproj", "{71B6AA3D-074F-C537-A31E-6FC5CBD74113}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonMMOCommonLib", "..\..\PhotonMMOCommonLib\PhotonMMOCommonLib.csproj", "{7CAC2368-E54F-4211-BD46-0E476649FF8F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{92D8F777-E014-48ED-96F0-5C0CE8323D66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92D8F777-E014-48ED-96F0-5C0CE8323D66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92D8F777-E014-48ED-96F0-5C0CE8323D66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92D8F777-E014-48ED-96F0-5C0CE8323D66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71B6AA3D-074F-C537-A31E-6FC5CBD74113}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71B6AA3D-074F-C537-A31E-6FC5CBD74113}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71B6AA3D-074F-C537-A31E-6FC5CBD74113}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71B6AA3D-074F-C537-A31E-6FC5CBD74113}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CAC2368-E54F-4211-BD46-0E476649FF8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CAC2368-E54F-4211-BD46-0E476649FF8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CAC2368-E54F-4211-BD46-0E476649FF8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CAC2368-E54F-4211-BD46-0E476649FF8F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

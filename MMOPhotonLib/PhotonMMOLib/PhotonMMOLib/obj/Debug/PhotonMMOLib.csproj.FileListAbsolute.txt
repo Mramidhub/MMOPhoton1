@@ -1,0 +1,18 @@
+D:\GameDev\Unity\MMOPhoton\MMOPhotonServer\deploy\PhotonMMO\bin\log4net.config
+D:\GameDev\Unity\MMOPhoton\MMOPhotonServer\deploy\PhotonMMO\bin\PhotonMMOLib.dll
+D:\GameDev\Unity\MMOPhoton\MMOPhotonServer\deploy\PhotonMMO\bin\PhotonMMOLib.pdb
+D:\GameDev\Unity\MMOPhoton\MMOPhotonLib\PhotonMMOLib\PhotonMMOLib\obj\Debug\PhotonMMOLib.csprojResolveAssemblyReference.cache
+D:\GameDev\Unity\MMOPhoton\MMOPhotonLib\PhotonMMOLib\PhotonMMOLib\obj\Debug\PhotonMMOLib.dll
+D:\GameDev\Unity\MMOPhoton\MMOPhotonLib\PhotonMMOLib\PhotonMMOLib\obj\Debug\PhotonMMOLib.pdb
+C:\Users\Anrum Red\Documents\photonmmo\MMOPhotonServer\deploy\PhotonMMO\bin\log4net.config
+C:\Users\Anrum Red\Documents\photonmmo\MMOPhotonServer\deploy\PhotonMMO\bin\PhotonMMOLib.dll
+C:\Users\Anrum Red\Documents\photonmmo\MMOPhotonServer\deploy\PhotonMMO\bin\PhotonMMOLib.pdb
+C:\Users\Anrum Red\Documents\photonmmo\MMOPhotonLib\PhotonMMOLib\PhotonMMOLib\obj\Debug\PhotonMMOLib.csprojResolveAssemblyReference.cache
+C:\Users\Anrum Red\Documents\photonmmo\MMOPhotonLib\PhotonMMOLib\PhotonMMOLib\obj\Debug\PhotonMMOLib.dll
+C:\Users\Anrum Red\Documents\photonmmo\MMOPhotonLib\PhotonMMOLib\PhotonMMOLib\obj\Debug\PhotonMMOLib.pdb
+D:\GameDev\Unity\MMOPhoton1\MMOPhotonServer\deploy\PhotonMMO\bin\log4net.config
+D:\GameDev\Unity\MMOPhoton1\MMOPhotonServer\deploy\PhotonMMO\bin\PhotonMMOLib.dll
+D:\GameDev\Unity\MMOPhoton1\MMOPhotonServer\deploy\PhotonMMO\bin\PhotonMMOLib.pdb
+D:\GameDev\Unity\MMOPhoton1\MMOPhotonLib\PhotonMMOLib\PhotonMMOLib\obj\Debug\PhotonMMOLib.csprojResolveAssemblyReference.cache
+D:\GameDev\Unity\MMOPhoton1\MMOPhotonLib\PhotonMMOLib\PhotonMMOLib\obj\Debug\PhotonMMOLib.dll
+D:\GameDev\Unity\MMOPhoton1\MMOPhotonLib\PhotonMMOLib\PhotonMMOLib\obj\Debug\PhotonMMOLib.pdb

@@ -1,0 +1,5 @@
+D:\GameDev\Unity\MMOPhoton1\MMOPhotonClinet\Assets\Plugins\PhotonMMOCommonLib\obj\Debug\PhotonMMOCommonLib.csprojResolveAssemblyReference.cache
+D:\GameDev\Unity\MMOPhoton1\MMOPhotonClinet\Assets\Plugins\PhotonMMOCommonLib\obj\Debug\PhotonMMO.Common.dll
+D:\GameDev\Unity\MMOPhoton1\MMOPhotonClinet\Assets\Plugins\PhotonMMOCommonLib\obj\Debug\PhotonMMO.Common.pdb
+D:\GameDev\Unity\MMOPhoton1\MMOPhotonClinet\Assets\Plugins\PhotonMMO.Common.dll
+D:\GameDev\Unity\MMOPhoton1\MMOPhotonClinet\Assets\Plugins\PhotonMMO.Common.pdb
