@@ -43,6 +43,7 @@ namespace PhotonMMOLib
                     break;
                 case (byte)OperationCode.LoadAnotherPlayers:
                     AnotherPlayersLoading(operationRequest, sendParameters);
+                    Log.Debug("another load");
                     break;
                 case (byte)OperationCode.Move:
                     Move(operationRequest, sendParameters);
@@ -56,9 +57,12 @@ namespace PhotonMMOLib
         void InGameEntering(OperationRequest operationRequest, SendParameters sendParameters)
         {
             // Позиция.
-            position = new Vector3DPosition((float)operationRequest.Parameters[(byte)PropertiesCode.posX],
-                                            (float)operationRequest.Parameters[(byte)PropertiesCode.posY],
-                                            (float)operationRequest.Parameters[(byte)PropertiesCode.posZ]);
+
+            float x = Convert.ToSingle(operationRequest.Parameters[(byte)PropertiesCode.posX]);
+            float y = Convert.ToSingle(operationRequest.Parameters[(byte)PropertiesCode.posY]);
+            float z = Convert.ToSingle(operationRequest.Parameters[(byte)PropertiesCode.posZ]);
+
+            position = new Vector3DPosition(x, y, z);
 
             // Ответ вызывавшему.
             OperationResponse response = new OperationResponse(operationRequest.OperationCode);
@@ -92,6 +96,7 @@ namespace PhotonMMOLib
 
         void AnotherPlayersLoading(OperationRequest operationRequest, SendParameters sendParameters)
         {
+            Log.Debug("another load0");
             for (int a = 0; a < Server.inst.allClients.Count; a++)
             {
                 var client = Server.inst.allClients[a];
@@ -105,20 +110,28 @@ namespace PhotonMMOLib
                         { (byte)PropertiesCode.idClient, client.idClient }
                         };
 
+                Log.Debug("another load1");
+
                 SendOperationResponse(response, sendParameters);
             }
         }
 
         void Move(OperationRequest operationRequest, SendParameters sendParameters)
         {
-            position = new Vector3DPosition((float)operationRequest.Parameters[(byte)PropertiesCode.posX],
-                                            (float)operationRequest.Parameters[(byte)PropertiesCode.posY],
-                                            (float)operationRequest.Parameters[(byte)PropertiesCode.posZ]);
+            float x = Convert.ToSingle(operationRequest.Parameters[(byte)PropertiesCode.posX]);
+            float y = Convert.ToSingle(operationRequest.Parameters[(byte)PropertiesCode.posY]);
+            float z = Convert.ToSingle(operationRequest.Parameters[(byte)PropertiesCode.posZ]);
+
+            position = new Vector3DPosition(x, y, z);
 
             // Log.Debug(operationRequest.Parameters[(byte)PropertiesCode.posX] + " " + operationRequest.Parameters[(byte)PropertiesCode.posY] + " " + operationRequest.Parameters[(byte)PropertiesCode.posZ]);
             // Log.Debug(newMove.X + " " + newMove.Y + " " + newMove.Z);
 
             var eventDataMove = new EventData((byte)EventCode.Move);
+
+
+            Log.Debug("move " + " " + x + " " + y + " " + z);
+
 
             eventDataMove.Parameters = new Dictionary<byte, object> {
                         { (byte)PropertiesCode.posX,  position.X},
