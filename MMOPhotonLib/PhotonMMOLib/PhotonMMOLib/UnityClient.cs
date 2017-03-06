@@ -42,16 +42,9 @@ namespace PhotonMMOLib
                 case (byte)OperationCode.EnterInGame:
                     InGameEntering(operationRequest, sendParameters);
                     break;
-                //case 2:
-                // Если клиент прислал код операции 2, то отслаем ему ивент.
-                    //if (operationRequest.Parameters.ContainsKey(1))
-                    //{
-                    //    Log.Debug("recv:" + operationRequest.Parameters[1]);
-                    //    EventData eventData = new EventData(1);
-                    //    eventData.Parameters = new Dictionary<byte, object> { { 1, "response message" } };
-                    //    SendEvent(eventData, sendParameters);
-                    //}
-                    //break;
+                case (byte)OperationCode.LoadAnotherPlayers:
+                    AnotherPlayersLoading(operationRequest, sendParameters);
+                    break;
                 default:
                     break;
             }
@@ -92,6 +85,25 @@ namespace PhotonMMOLib
                     };
 
             eventData1.SendTo(Server.inst.allClients, sendParameters);
+        }
+
+        void AnotherPlayersLoading(OperationRequest operationRequest, SendParameters sendParameters)
+        {
+            for (int a = 0; a < Server.inst.allClients.Count; a++)
+            {
+                var client = Server.inst.allClients[a];
+
+                OperationResponse response = new OperationResponse(operationRequest.OperationCode);
+
+                response.Parameters = new Dictionary<byte, object> {
+                        { (byte)PropertiesCode.posX,  client.position.X},
+                        { (byte)PropertiesCode.posY,  client.position.Y},
+                        { (byte)PropertiesCode.posZ,  client.position.Z},
+                        { (byte)PropertiesCode.idClient, client.idClient }
+                        };
+
+                SendOperationResponse(response, sendParameters);
+            }
         }
         #endregion
     }

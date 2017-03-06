@@ -4,6 +4,7 @@
     {
         EnterInGame,
         OtherPlayerEnterInGame,
+        LoadAnotherPlayers,
         Move,
 
     }

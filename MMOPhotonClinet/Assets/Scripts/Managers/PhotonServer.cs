@@ -85,6 +85,9 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
             case (byte)OperationCode.EnterInGame:
                 InGameEnteringHandler(operationResponse);
                 break;
+            case (byte)OperationCode.LoadAnotherPlayers:
+                OtherPlayerEntering(operationResponse);
+                break;
             default:
                 Debug.Log("Unknown OperationResponse:" + operationResponse.OperationCode);
                 break;
@@ -153,6 +156,11 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
         }, true);
     }
 
+    public void LoadOtherPlayers()
+    {
+        PhotonPeer.OpCustom((byte)OperationCode.LoadAnotherPlayers, new Dictionary<byte, object> { {1, "OtherPlayersLoaded" } }, true);
+    }
+
     public void SendLocalPlayerMoveOperation()
     {
         Dictionary<byte, object> properies = new Dictionary<byte, object> {
@@ -177,6 +185,8 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
         PlayersManager.Instance.InstLocalPlayer(position, (int)operationResponse.Parameters[(byte)PropertiesCode.idClient]);
 
         InGameEnter.Invoke();
+
+        LoadOtherPlayers();
     }
 
     void OtherPlayerEntering(EventData eventData)
@@ -189,6 +199,18 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
                                        (float)eventData.Parameters[(byte)PropertiesCode.posZ]);
 
         PlayersManager.Instance.InstAnotherPlayer(position, (int)eventData.Parameters[(byte)PropertiesCode.idClient]);
+    }
+
+    void OtherPlayerEntering(OperationResponse operationResponse)
+    {
+        if (PlayersManager.Instance.localPlayer.idClient == (int)operationResponse.Parameters[(byte)PropertiesCode.idClient])
+            return;
+
+        Vector3 position = new Vector3((float)operationResponse.Parameters[(byte)PropertiesCode.posX],
+                                       (float)operationResponse.Parameters[(byte)PropertiesCode.posY],
+                                       (float)operationResponse.Parameters[(byte)PropertiesCode.posZ]);
+
+        PlayersManager.Instance.InstAnotherPlayer(position, (int)operationResponse.Parameters[(byte)PropertiesCode.idClient]);
     }
 
     #endregion
