@@ -8,10 +8,16 @@ public class BaseEntity : MonoBehaviour
 
     public float lerp = 1f;
     public float stepSize = 1f;
+    protected Vector3 newPosition = new Vector3();
+    protected bool move;
 
-    public void MoveEtentity(Vector3 newPosition)
+    
+    public void MoveEtentity(Vector3 newPos)
     {
-        transform.position = Vector3.Lerp(transform.position, newPosition, lerp);
+        newPosition = newPos;
+        move = true;
     }
+
+
 
 }
