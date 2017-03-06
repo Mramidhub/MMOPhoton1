@@ -17,7 +17,7 @@ namespace PhotonMMOLib
         private readonly ILogger Log = LogManager.GetCurrentClassLogger();
 
         // id
-        int idClient = 0;
+        public int idClient = 0;
         Vector3DPosition position = new Vector3DPosition();
 
         public UnityClient(IRpcProtocol protocol, IPhotonPeer unmanagedPeer, int id) : base(protocol, unmanagedPeer)
@@ -38,12 +38,14 @@ namespace PhotonMMOLib
         {
             switch (operationRequest.OperationCode)
             {
-                // Если клиент прислал код операции 1, то отслаем ему ответ .
                 case (byte)OperationCode.EnterInGame:
                     InGameEntering(operationRequest, sendParameters);
                     break;
                 case (byte)OperationCode.LoadAnotherPlayers:
                     AnotherPlayersLoading(operationRequest, sendParameters);
+                    break;
+                case (byte)OperationCode.Move:
+                    Move(operationRequest, sendParameters);
                     break;
                 default:
                     break;
@@ -54,8 +56,9 @@ namespace PhotonMMOLib
         void InGameEntering(OperationRequest operationRequest, SendParameters sendParameters)
         {
             // Позиция.
-            Move newMove = new Move(Protocol, operationRequest);
-            position = new Vector3DPosition(newMove.X, newMove.Y, newMove.Z);
+            position = new Vector3DPosition((float)operationRequest.Parameters[(byte)PropertiesCode.posX],
+                                            (float)operationRequest.Parameters[(byte)PropertiesCode.posY],
+                                            (float)operationRequest.Parameters[(byte)PropertiesCode.posZ]);
 
             // Ответ вызывавшему.
             OperationResponse response = new OperationResponse(operationRequest.OperationCode);
@@ -105,6 +108,29 @@ namespace PhotonMMOLib
                 SendOperationResponse(response, sendParameters);
             }
         }
+
+        void Move(OperationRequest operationRequest, SendParameters sendParameters)
+        {
+            position = new Vector3DPosition((float)operationRequest.Parameters[(byte)PropertiesCode.posX],
+                                            (float)operationRequest.Parameters[(byte)PropertiesCode.posY],
+                                            (float)operationRequest.Parameters[(byte)PropertiesCode.posZ]);
+
+            // Log.Debug(operationRequest.Parameters[(byte)PropertiesCode.posX] + " " + operationRequest.Parameters[(byte)PropertiesCode.posY] + " " + operationRequest.Parameters[(byte)PropertiesCode.posZ]);
+            // Log.Debug(newMove.X + " " + newMove.Y + " " + newMove.Z);
+
+            var eventDataMove = new EventData((byte)EventCode.Move);
+
+            eventDataMove.Parameters = new Dictionary<byte, object> {
+                        { (byte)PropertiesCode.posX,  position.X},
+                        { (byte)PropertiesCode.posY,  position.Y},
+                        { (byte)PropertiesCode.posZ,  position.Z},
+                        { (byte)PropertiesCode.idClient, idClient }
+                    };
+
+            // Отправляем событие все, кроме вызвающего.
+            eventDataMove.SendTo(Server.inst.AllBeyondId(idClient), sendParameters);
+        }
+
         #endregion
     }
 }

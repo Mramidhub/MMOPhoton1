@@ -34,25 +34,34 @@ namespace Assets.Scripts.Managers
                 var player = PlayersManager.Instance.localPlayer;
                 Vector3 newPos = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z + player.stepSize);
                 PlayersManager.Instance.localPlayer.MoveEtentity(newPos);
+                SendMoveToServer();
             }
             if (Input.GetKey(KeyCode.S))
             {
                 var player = PlayersManager.Instance.localPlayer;
                 Vector3 newPos = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z - player.stepSize);
                 PlayersManager.Instance.localPlayer.MoveEtentity(newPos);
+                SendMoveToServer();
             }
             if (Input.GetKey(KeyCode.D))
             {
                 var player = PlayersManager.Instance.localPlayer;
                 Vector3 newPos = new Vector3(player.transform.position.x + player.stepSize, player.transform.position.y, player.transform.position.z);
                 PlayersManager.Instance.localPlayer.MoveEtentity(newPos);
+                SendMoveToServer();
             }
             if (Input.GetKey(KeyCode.A))
             {
                 var player = PlayersManager.Instance.localPlayer;
                 Vector3 newPos = new Vector3(player.transform.position.x - player.stepSize, player.transform.position.y, player.transform.position.z);
                 PlayersManager.Instance.localPlayer.MoveEtentity(newPos);
+                SendMoveToServer();
             }
+        }
+
+        void SendMoveToServer()
+        {
+            PhotonServer.Instance.SendLocalPlayerMove();
         }
     }
 }

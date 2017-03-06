@@ -105,6 +105,9 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
                     OtherPlayerEntering(eventData);
                 }
                 break;
+            case (byte)EventCode.Move:
+                MoveHandler(eventData);
+                break;
             default:
                 Debug.Log("Unknown OperationResponse:" + eventData.Code);
                 break;
@@ -161,7 +164,7 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
         PhotonPeer.OpCustom((byte)OperationCode.LoadAnotherPlayers, new Dictionary<byte, object> { {1, "OtherPlayersLoaded" } }, true);
     }
 
-    public void SendLocalPlayerMoveOperation()
+    public void SendLocalPlayerMove()
     {
         Dictionary<byte, object> properies = new Dictionary<byte, object> {
 
@@ -169,7 +172,8 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
             { (byte)PropertiesCode.posY, PlayersManager.Instance.localPlayer.transform.position.y},
             { (byte)PropertiesCode.posZ, PlayersManager.Instance.localPlayer.transform.position.z}
         };
-        PhotonPeer.OpCustom((byte)OperationCode.Move, properies, true);
+
+        PhotonPeer.OpCustom((byte)OperationCode.Move, properies, false);
     }
     #endregion
 
@@ -211,6 +215,26 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
                                        (float)operationResponse.Parameters[(byte)PropertiesCode.posZ]);
 
         PlayersManager.Instance.InstAnotherPlayer(position, (int)operationResponse.Parameters[(byte)PropertiesCode.idClient]);
+    }
+
+    void MoveHandler(EventData eventData)
+    {
+        foreach (Player player in PlayersManager.Instance.players)
+        {
+            if (player.idClient == (int)eventData.Parameters[(byte)PropertiesCode.idClient])
+            {
+                Debug.Log((float)eventData.Parameters[(byte)PropertiesCode.posX] + " " + (float)eventData.Parameters[(byte)PropertiesCode.posY] + " " + (float)eventData.Parameters[(byte)PropertiesCode.posZ]);
+                Vector3 newPosition = new Vector3(
+                    (float)eventData.Parameters[(byte)PropertiesCode.posX],
+                    (float)eventData.Parameters[(byte)PropertiesCode.posY],
+                    (float)eventData.Parameters[(byte)PropertiesCode.posZ]);
+
+                player.MoveEtentity(newPosition);
+
+                break;
+            }
+
+        }
     }
 
     #endregion

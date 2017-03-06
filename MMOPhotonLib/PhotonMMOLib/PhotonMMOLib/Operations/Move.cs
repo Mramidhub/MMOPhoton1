@@ -12,7 +12,9 @@ namespace TestPhotonLib.Operations
     {
         public Move(IRpcProtocol protocol, OperationRequest request)
         {
-
+            //X = (float)request.Parameters[(byte)PropertiesCode.posX];
+            //Y = (float)request.Parameters[(byte)PropertiesCode.posY];
+            //Z = (float)request.Parameters[(byte)PropertiesCode.posZ];
         }
 
         [DataMember(Code = (byte)PropertiesCode.posX)]
