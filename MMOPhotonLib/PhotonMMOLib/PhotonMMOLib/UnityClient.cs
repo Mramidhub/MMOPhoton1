@@ -48,6 +48,9 @@ namespace PhotonMMOLib
                 case (byte)OperationCode.Move:
                     Move(operationRequest, sendParameters);
                     break;
+                case (byte)OperationCode.ExitGame:
+                    ExitGame(operationRequest, sendParameters);
+                    break;
                 default:
                     break;
             }
@@ -124,14 +127,7 @@ namespace PhotonMMOLib
 
             position = new Vector3DPosition(x, y, z);
 
-            // Log.Debug(operationRequest.Parameters[(byte)PropertiesCode.posX] + " " + operationRequest.Parameters[(byte)PropertiesCode.posY] + " " + operationRequest.Parameters[(byte)PropertiesCode.posZ]);
-            // Log.Debug(newMove.X + " " + newMove.Y + " " + newMove.Z);
-
             var eventDataMove = new EventData((byte)EventCode.Move);
-
-
-            Log.Debug("move " + " " + x + " " + y + " " + z);
-
 
             eventDataMove.Parameters = new Dictionary<byte, object> {
                         { (byte)PropertiesCode.posX,  position.X},
@@ -142,6 +138,29 @@ namespace PhotonMMOLib
 
             // Отправляем событие все, кроме вызвающего.
             eventDataMove.SendTo(Server.inst.AllBeyondId(idClient), sendParameters);
+        }
+
+        void ExitGame(OperationRequest operationRequest, SendParameters sendParameters)
+        {
+            OperationResponse response = new OperationResponse(operationRequest.OperationCode);
+
+            Log.Debug("id client " + idClient + " exit");
+
+            SendOperationResponse(response, sendParameters);
+
+
+            var eventData1 = new EventData((byte)EventCode.OtherPlayerExitGame);
+
+            eventData1.Parameters = new Dictionary<byte, object> {{ (byte)PropertiesCode.idClient, idClient }};
+
+            eventData1.SendTo(Server.inst.AllBeyondId(idClient), sendParameters);
+
+            Log.Debug("clients " + Server.inst.allClients.Count);
+
+            Server.inst.allClients.Remove(this);
+
+            Log.Debug("clients " + Server.inst.allClients.Count);
+
         }
 
         #endregion

@@ -9,5 +9,6 @@ namespace PhotonMMO.Common
     {
         Move,
         OtherPlayerEnterInGame,
+        OtherPlayerExitGame,
     }
 }

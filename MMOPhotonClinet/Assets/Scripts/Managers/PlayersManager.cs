@@ -40,6 +40,11 @@ public class PlayersManager : MonoBehaviour
         players[players.Count-1].idClient = idClient;
     }
 
+    public void DestroyLocalPlayer()
+    {
+        Destroy(localPlayer.gameObject);
+    }
+
     public void InstAnotherPlayer(Vector3 position, int idClient)
     {
         // Создаем игрока.
@@ -56,4 +61,27 @@ public class PlayersManager : MonoBehaviour
         players[players.Count-1].idClient = idClient;
     }
 
+    public void DeleteAllPlayers()
+    {
+        int a = 0;
+        while (players.Count > 0)
+        {
+            if (a > 1000)
+            {
+                Debug.Log("1");
+                return;
+            }
+
+            var tempplayer = players[0];
+            if (tempplayer != null)
+            {
+                players.Remove(tempplayer);
+                Destroy(tempplayer.gameObject);
+            }
+
+            a++;
+        }
+
+        PlayersManager.Instance.players.Clear();
+    }
 }

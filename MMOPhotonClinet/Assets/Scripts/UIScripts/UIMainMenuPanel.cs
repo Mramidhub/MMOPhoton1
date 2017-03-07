@@ -15,7 +15,6 @@ namespace Assets.Scripts.UIScripts
 
         void Awake()
         {
-            PhotonServer.Instance.InGameEnter.AddListener(Hide);
         }
 
         public void EnterInGame()

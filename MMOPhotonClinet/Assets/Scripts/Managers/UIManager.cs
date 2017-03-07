@@ -12,6 +12,7 @@ namespace Assets.Scripts.Managers
 
         #region Panels
         public UIMainMenuPanel UIMainMenuPanel;
+        public UIInGameMenuPanel UIInGamePanel;
         #endregion
 
 
@@ -21,6 +22,11 @@ namespace Assets.Scripts.Managers
             {
                 Instance = this;
             }
+            GameManager.Instance.StartGame.AddListener(UIMainMenuPanel.Show);
+            PhotonServer.Instance.InGameEnter.AddListener(UIInGamePanel.Show);
+            PhotonServer.Instance.GameExit.AddListener(UIInGamePanel.Hide);
+            PhotonServer.Instance.InGameEnter.AddListener(UIMainMenuPanel.Hide);
+            PhotonServer.Instance.GameExit.AddListener(UIMainMenuPanel.Show);
         }
     }
 }

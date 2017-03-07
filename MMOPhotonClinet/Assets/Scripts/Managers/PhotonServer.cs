@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System;
 using PhotonMMO.Common;
+using System.Linq;
 
 public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
 
@@ -23,6 +24,7 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
 
     // Events.
     public UnityEvent InGameEnter = new UnityEvent();
+    public UnityEvent GameExit = new UnityEvent();
 
 
     void Awake()
@@ -46,7 +48,6 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
         // При старте создаем нового пира. Указываем экземпляр IPhoonPeerListener и вид протокола.
         PhotonPeer = new PhotonPeer(this, ConnectionProtocol.Udp);
         // Коннектимся к севраку.
-        Connect();
     }
 
     void Update()
@@ -66,10 +67,16 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
         PhotonPeer.Disconnect();
     }
 
-    private void Connect()
+    public void Connect()
     {
         if (PhotonPeer != null)
             PhotonPeer.Connect(CONNECTION_STRING, APP_NAME);
+    }
+
+    public void DisconnectPeer()
+    {
+        if (PhotonPeer != null)
+            PhotonPeer.Disconnect();
     }
 
     public void DebugReturn(DebugLevel level, string message)
@@ -87,6 +94,9 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
                 break;
             case (byte)OperationCode.LoadAnotherPlayers:
                 OtherPlayerEntering(operationResponse);
+                break;
+            case (byte)OperationCode.ExitGame:
+                ExitGameHandler(operationResponse);
                 break;
             default:
                 Debug.Log("Unknown OperationResponse:" + operationResponse.OperationCode);
@@ -108,6 +118,9 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
             case (byte)EventCode.Move:
                 MoveHandler(eventData);
                 break;
+            case (byte)EventCode.OtherPlayerExitGame:
+                OtherPlayerExitGameHandler(eventData);
+                break;
             default:
                 Debug.Log("Unknown OperationResponse:" + eventData.Code);
                 break;
@@ -122,6 +135,7 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
         {
             case StatusCode.Connect:
                 Debug.Log("Connected to server!");
+                EnterInGame();
                 break;
             case StatusCode.Disconnect:
                 Debug.Log("Disconnected from server!");
@@ -150,7 +164,7 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
 
     // Запросы к серваку.
     #region Operations
-    public void ConnectedToServer()
+    public void EnterInGame()
     {
         PhotonPeer.OpCustom((byte)OperationCode.EnterInGame, new Dictionary<byte, object> {
             { (byte)PropertiesCode.posX, 0},
@@ -159,9 +173,14 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
         }, true);
     }
 
+    public void ExitGame()
+    {
+        PhotonPeer.OpCustom((byte)OperationCode.ExitGame, new Dictionary<byte, object> { }, true);
+    }
+
     public void LoadOtherPlayers()
     {
-        PhotonPeer.OpCustom((byte)OperationCode.LoadAnotherPlayers, new Dictionary<byte, object> { {1, "OtherPlayersLoaded" } }, true);
+        PhotonPeer.OpCustom((byte)OperationCode.LoadAnotherPlayers, new Dictionary<byte, object> { { 1, "OtherPlayersLoaded" } }, true);
     }
 
     public void SendLocalPlayerMove()
@@ -238,6 +257,20 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
             }
 
         }
+    }
+
+    void ExitGameHandler(OperationResponse operationResponse)
+    {
+        PlayersManager.Instance.DeleteAllPlayers();
+
+        GameExit.Invoke();
+
+        DisconnectPeer();
+    }
+
+    void OtherPlayerExitGameHandler(EventData eventData)
+    {
+        Destroy(PlayersManager.Instance.players.First(p=> p.idClient == Convert.ToInt32(eventData.Parameters[(byte)PropertiesCode.idClient])).gameObject);
     }
 
     #endregion

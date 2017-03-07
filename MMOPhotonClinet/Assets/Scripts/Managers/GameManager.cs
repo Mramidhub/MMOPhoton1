@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Assets.Scripts.Managers
 {
@@ -11,6 +12,8 @@ namespace Assets.Scripts.Managers
         public static GameManager Instance;
 
         public bool InGameEntering;
+
+        public UnityEvent StartGame = new UnityEvent();
 
         void Awake()
         {
@@ -25,6 +28,9 @@ namespace Assets.Scripts.Managers
             StartServerSetup();
 
             PhotonServer.Instance.InGameEnter.AddListener(InGameEnteringTrue);
+            PhotonServer.Instance.GameExit.AddListener(InGameEnteringFalse);
+
+            StartGame.Invoke();
         }
 
         void StartServerSetup()
@@ -33,12 +39,17 @@ namespace Assets.Scripts.Managers
 
         public void EnterInGame()
         {
-            PhotonServer.Instance.ConnectedToServer();
+            PhotonServer.Instance.Connect();
         }
 
         void InGameEnteringTrue()
         {
             InGameEntering = true;
+        }
+
+        void InGameEnteringFalse()
+        {
+            InGameEntering = false;
         }
     }
 }
