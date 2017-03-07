@@ -26,8 +26,6 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
     public UnityEvent InGameEnter = new UnityEvent();
     public UnityEvent GameExit = new UnityEvent();
 
-    public float sendMoveDelay = 0.05f;
-
 
     void Awake()
     {
@@ -187,13 +185,6 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
 
     public void SendLocalPlayerMove()
     {
-        sendMoveDelay -= Time.deltaTime;
-
-        if (sendMoveDelay > 0)
-            return;
-
-        sendMoveDelay = 0.05f;
-
         Dictionary<byte, object> properies = new Dictionary<byte, object> {
 
             { (byte)PropertiesCode.posX, PlayersManager.Instance.localPlayer.transform.position.x},
@@ -224,6 +215,8 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
     void OtherPlayerEntering(EventData eventData)
     {
 
+        Debug.Log("12");
+
         if (PlayersManager.Instance.localPlayer.idClient == (int)eventData.Parameters[(byte)PropertiesCode.idClient])
             return;
 
@@ -252,7 +245,7 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
         {
             if (player.idClient == (int)eventData.Parameters[(byte)PropertiesCode.idClient])
             {
-                // Debug.Log((float)eventData.Parameters[(byte)PropertiesCode.posX] + " " + (float)eventData.Parameters[(byte)PropertiesCode.posY] + " " + (float)eventData.Parameters[(byte)PropertiesCode.posZ]);
+                Debug.Log((float)eventData.Parameters[(byte)PropertiesCode.posX] + " " + (float)eventData.Parameters[(byte)PropertiesCode.posY] + " " + (float)eventData.Parameters[(byte)PropertiesCode.posZ]);
                 Vector3 newPosition = new Vector3(
                     (float)eventData.Parameters[(byte)PropertiesCode.posX],
                     (float)eventData.Parameters[(byte)PropertiesCode.posY],
