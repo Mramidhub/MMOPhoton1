@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayersManager : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class PlayersManager : MonoBehaviour
     public GameObject playerPrefab;
     public Player localPlayer;
     Vector3 lastPosLocalPlayer;
-    
+
+    UnityEvent destroyPlayers = new UnityEvent();
 
     void Awake()
     {
@@ -63,24 +65,16 @@ public class PlayersManager : MonoBehaviour
 
     public void DeleteAllPlayers()
     {
-        int a = 0;
-        while (players.Count > 0)
+        for (int b = 0; b < players.Count; b++)
         {
-            if (a > 1000)
-            {
-                Debug.Log("1");
-                return;
-            }
-
-            var tempplayer = players[0];
-            if (tempplayer != null)
-            {
-                players.Remove(tempplayer);
-                Destroy(tempplayer.gameObject);
-            }
-
-            a++;
+            destroyPlayers.AddListener(players[b].DestroyEntity);
         }
+
+        destroyPlayers.AddListener(localPlayer.DestroyEntity);
+
+        destroyPlayers.Invoke();
+
+        destroyPlayers.RemoveAllListeners();
 
         PlayersManager.Instance.players.Clear();
     }

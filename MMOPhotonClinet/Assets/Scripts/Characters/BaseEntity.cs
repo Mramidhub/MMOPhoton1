@@ -19,5 +19,9 @@ public class BaseEntity : MonoBehaviour
     }
 
 
+    public void DestroyEntity()
+    {
+        Destroy(gameObject);
+    }
 
 }

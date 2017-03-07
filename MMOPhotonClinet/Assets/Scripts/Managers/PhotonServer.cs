@@ -215,8 +215,6 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
     void OtherPlayerEntering(EventData eventData)
     {
 
-        Debug.Log("12");
-
         if (PlayersManager.Instance.localPlayer.idClient == (int)eventData.Parameters[(byte)PropertiesCode.idClient])
             return;
 
@@ -245,7 +243,7 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
         {
             if (player.idClient == (int)eventData.Parameters[(byte)PropertiesCode.idClient])
             {
-                Debug.Log((float)eventData.Parameters[(byte)PropertiesCode.posX] + " " + (float)eventData.Parameters[(byte)PropertiesCode.posY] + " " + (float)eventData.Parameters[(byte)PropertiesCode.posZ]);
+                //Debug.Log((float)eventData.Parameters[(byte)PropertiesCode.posX] + " " + (float)eventData.Parameters[(byte)PropertiesCode.posY] + " " + (float)eventData.Parameters[(byte)PropertiesCode.posZ]);
                 Vector3 newPosition = new Vector3(
                     (float)eventData.Parameters[(byte)PropertiesCode.posX],
                     (float)eventData.Parameters[(byte)PropertiesCode.posY],

@@ -6,6 +6,7 @@ public class Player : BaseEntity
 {
     public int idClient = 0;
 
+
     void FixedUpdate()
     {
         if (move)
@@ -18,5 +19,4 @@ public class Player : BaseEntity
         }
 
     }
-
 }
