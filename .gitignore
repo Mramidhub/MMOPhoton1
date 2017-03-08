@@ -44,6 +44,7 @@ $RECYCLE.BIN/
 .AppleDesktop
 .MMOPhotonServer
 !/MMOPhotonServer
+!/MMOPhotonClinet/Temp
 Network Trash Folder
 Temporary Items
 .apdisk
