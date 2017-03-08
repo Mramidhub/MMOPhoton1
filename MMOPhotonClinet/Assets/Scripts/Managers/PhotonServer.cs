@@ -169,7 +169,7 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
         PhotonPeer.OpCustom((byte)OperationCode.EnterInGame, new Dictionary<byte, object> {
             { (byte)PropertiesCode.posX, 0},
             { (byte)PropertiesCode.posY, 0},
-            { (byte)PropertiesCode.posZ, 0}
+            { (byte)PropertiesCode.posZ, 0},
         }, true);
     }
 
@@ -189,7 +189,11 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
 
             { (byte)PropertiesCode.posX, PlayersManager.Instance.localPlayer.transform.position.x},
             { (byte)PropertiesCode.posY, PlayersManager.Instance.localPlayer.transform.position.y},
-            { (byte)PropertiesCode.posZ, PlayersManager.Instance.localPlayer.transform.position.z}
+            { (byte)PropertiesCode.posZ, PlayersManager.Instance.localPlayer.transform.position.z},
+            { (byte)PropertiesCode.rotX, PlayersManager.Instance.localPlayer.transform.rotation.x},
+            { (byte)PropertiesCode.rotY, PlayersManager.Instance.localPlayer.transform.rotation.y},
+            { (byte)PropertiesCode.rotZ, PlayersManager.Instance.localPlayer.transform.rotation.z},
+            { (byte)PropertiesCode.rotW, PlayersManager.Instance.localPlayer.transform.rotation.w}
         };
 
         PhotonPeer.OpCustom((byte)OperationCode.Move, properies, false);
@@ -249,7 +253,14 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
                     (float)eventData.Parameters[(byte)PropertiesCode.posY],
                     (float)eventData.Parameters[(byte)PropertiesCode.posZ]);
 
+                Quaternion newRotation = new Quaternion(
+                    (float)eventData.Parameters[(byte)PropertiesCode.rotX],
+                    (float)eventData.Parameters[(byte)PropertiesCode.rotY],
+                    (float)eventData.Parameters[(byte)PropertiesCode.rotZ],
+                    (float)eventData.Parameters[(byte)PropertiesCode.rotW]);
+
                 player.MoveEtentity(newPosition);
+                player.RotateEtentuty(newRotation);
 
                 break;
             }

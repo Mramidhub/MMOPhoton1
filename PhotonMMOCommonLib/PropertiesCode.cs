@@ -7,6 +7,9 @@ namespace PhotonMMO.Common
         posY,
         posZ,
         idClient,
-
+        rotX,
+        rotY,
+        rotZ,
+        rotW,
     }
 }

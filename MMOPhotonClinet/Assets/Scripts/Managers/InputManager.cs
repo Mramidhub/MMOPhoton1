@@ -33,6 +33,7 @@ namespace Assets.Scripts.Managers
             {
                 var player = PlayersManager.Instance.localPlayer;
                 Vector3 newPos = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z + player.stepSize);
+                PlayersManager.Instance.localPlayer.RotateEtentuty();
                 PlayersManager.Instance.localPlayer.MoveEtentity(newPos);
                 SendMoveToServer();
             }
@@ -40,6 +41,7 @@ namespace Assets.Scripts.Managers
             {
                 var player = PlayersManager.Instance.localPlayer;
                 Vector3 newPos = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z - player.stepSize);
+                PlayersManager.Instance.localPlayer.RotateEtentuty();
                 PlayersManager.Instance.localPlayer.MoveEtentity(newPos);
                 SendMoveToServer();
             }
@@ -47,6 +49,7 @@ namespace Assets.Scripts.Managers
             {
                 var player = PlayersManager.Instance.localPlayer;
                 Vector3 newPos = new Vector3(player.transform.position.x + player.stepSize, player.transform.position.y, player.transform.position.z);
+                PlayersManager.Instance.localPlayer.RotateEtentuty();
                 PlayersManager.Instance.localPlayer.MoveEtentity(newPos);
                 SendMoveToServer();
             }
@@ -54,6 +57,7 @@ namespace Assets.Scripts.Managers
             {
                 var player = PlayersManager.Instance.localPlayer;
                 Vector3 newPos = new Vector3(player.transform.position.x - player.stepSize, player.transform.position.y, player.transform.position.z);
+                PlayersManager.Instance.localPlayer.RotateEtentuty();
                 PlayersManager.Instance.localPlayer.MoveEtentity(newPos);
                 SendMoveToServer();
             }

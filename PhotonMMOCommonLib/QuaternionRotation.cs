@@ -5,24 +5,24 @@ using System.Text;
 
 namespace PhotonMMO.Common
 {
-    public class Vector3DPosition
+    public class QuaternionRotation
     {
         public float X { get; set; }
         public float Y { get; set; }
         public float Z { get; set; }
+        public float W { get; set; }
 
-        public Vector3DPosition()
+        public QuaternionRotation()
         {
-            X = 0;
-            Y = 0;
-            Z = 0;
+
         }
 
-        public Vector3DPosition(float xpos, float ypos, float zpos)
+        public QuaternionRotation(float xrot, float yrot, float zrot, float wrot)
         {
-            X = xpos;
-            Y = ypos;
-            Z = zpos;
+            X = xrot;
+            Y = yrot;
+            Z = zrot;
+            W = wrot;
         }
 
     }
