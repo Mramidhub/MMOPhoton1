@@ -7,7 +7,7 @@ public class BaseEntity : MonoBehaviour
 {
     public float hp { get; set; }
 
-    public float lerp = 1f;
+    public float lerp = 10f;
     public float stepSize = 1f;
     public float rotateSpeed = 7f;
     protected Vector3 newPosition = new Vector3();
@@ -17,8 +17,7 @@ public class BaseEntity : MonoBehaviour
     public void MoveEtentity(Vector3 newPos)
     {
         newPosition = newPos;
-        UpdatePostion();
-    }
+     }
 
     public void RotateEtentuty(Quaternion newRot)
     {

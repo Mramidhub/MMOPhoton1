@@ -54,7 +54,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AreaManager.cs" />
+    <Compile Include="UniverseStructure\BaseArea.cs" />
+    <Compile Include="UniverseStructure\Orbit.cs" />
+    <Compile Include="UniverseStructure\Planet.cs" />
+    <Compile Include="UniverseStructure\PlanetArea.cs" />
+    <Compile Include="UniverseStructure\Space.cs" />
+    <Compile Include="UniverseStructure\StarSystem.cs" />
+    <Compile Include="UniverseStructure\Galaxy.cs" />
+    <Compile Include="UniverseStructure\Sector.cs" />
+    <Compile Include="UniverseStructure\Unirverse.cs" />
     <Compile Include="Operations\Move.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -13,12 +13,15 @@ namespace PhotonMMOLib
     // Логика клиента на стороне сервера.
     public class UnityClient : PeerBase
     {
-        // Логгер.
+        // Logger.
         private readonly ILogger Log = LogManager.GetCurrentClassLogger();
 
-        // id
+        // id.
         public int idClient = 0;
+
+        // Postion - rotation.
         Vector3DPosition position = new Vector3DPosition();
+        QuaternionRotation rotation = new QuaternionRotation();
 
         public UnityClient(IRpcProtocol protocol, IPhotonPeer unmanagedPeer, int id) : base(protocol, unmanagedPeer)
         {
@@ -125,7 +128,13 @@ namespace PhotonMMOLib
             float y = Convert.ToSingle(operationRequest.Parameters[(byte)PropertiesCode.posY]);
             float z = Convert.ToSingle(operationRequest.Parameters[(byte)PropertiesCode.posZ]);
 
+            float rotX = Convert.ToSingle(operationRequest.Parameters[(byte)PropertiesCode.rotX]);
+            float rotY = Convert.ToSingle(operationRequest.Parameters[(byte)PropertiesCode.rotY]);
+            float rotZ = Convert.ToSingle(operationRequest.Parameters[(byte)PropertiesCode.rotZ]);
+            float rotW = Convert.ToSingle(operationRequest.Parameters[(byte)PropertiesCode.rotW]);
+
             position = new Vector3DPosition(x, y, z);
+            rotation = new QuaternionRotation(rotX, rotY, rotZ, rotW);
 
             var eventDataMove = new EventData((byte)EventCode.Move);
 
@@ -133,8 +142,14 @@ namespace PhotonMMOLib
                         { (byte)PropertiesCode.posX,  position.X},
                         { (byte)PropertiesCode.posY,  position.Y},
                         { (byte)PropertiesCode.posZ,  position.Z},
-                        { (byte)PropertiesCode.idClient, idClient }
+                        { (byte)PropertiesCode.idClient, idClient},
+                        { (byte)PropertiesCode.rotX,  rotation.X},
+                        { (byte)PropertiesCode.rotY,  rotation.Y},
+                        { (byte)PropertiesCode.rotZ,  rotation.Z},
+                        { (byte)PropertiesCode.rotW,  rotation.W}
                     };
+
+            sendParameters.Unreliable = false;
 
             // Отправляем событие все, кроме вызвающего.
             eventDataMove.SendTo(Server.inst.AllBeyondId(idClient), sendParameters);

@@ -43,6 +43,7 @@
     <Compile Include="OperationCode.cs" />
     <Compile Include="PropertiesCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuaternionRotation.cs" />
     <Compile Include="Vector3DPosition.cs" />
   </ItemGroup>
   <ItemGroup>

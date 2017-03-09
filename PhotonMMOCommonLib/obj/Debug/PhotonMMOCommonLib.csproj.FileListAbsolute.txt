@@ -10,3 +10,8 @@ C:\Users\Anrum Red\Downloads\MMOPhoton1\MMOPhoton1\MMOPhotonClinet\Assets\Plugin
 C:\Users\Anrum Red\Downloads\MMOPhoton1\MMOPhoton1\PhotonMMOCommonLib\obj\Debug\PhotonMMOCommonLib.csprojResolveAssemblyReference.cache
 C:\Users\Anrum Red\Downloads\MMOPhoton1\MMOPhoton1\PhotonMMOCommonLib\obj\Debug\PhotonMMO.Common.dll
 C:\Users\Anrum Red\Downloads\MMOPhoton1\MMOPhoton1\PhotonMMOCommonLib\obj\Debug\PhotonMMO.Common.pdb
+C:\Users\Mramid\Documents\GitHub\MMOPhoton1\MMOPhotonClinet\Assets\Plugins\PhotonMMO.Common.dll
+C:\Users\Mramid\Documents\GitHub\MMOPhoton1\MMOPhotonClinet\Assets\Plugins\PhotonMMO.Common.pdb
+C:\Users\Mramid\Documents\GitHub\MMOPhoton1\PhotonMMOCommonLib\obj\Debug\PhotonMMOCommonLib.csprojResolveAssemblyReference.cache
+C:\Users\Mramid\Documents\GitHub\MMOPhoton1\PhotonMMOCommonLib\obj\Debug\PhotonMMO.Common.dll
+C:\Users\Mramid\Documents\GitHub\MMOPhoton1\PhotonMMOCommonLib\obj\Debug\PhotonMMO.Common.pdb

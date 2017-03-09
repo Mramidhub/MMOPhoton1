@@ -9,7 +9,7 @@ public class Player : BaseEntity
 
     void Update()
     {
-
+        UpdatePostion();
     }
    
 }

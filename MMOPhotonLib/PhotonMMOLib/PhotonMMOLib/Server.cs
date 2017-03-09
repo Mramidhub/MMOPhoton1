@@ -2,6 +2,7 @@
 using ExitGames.Logging.Log4Net;
 using log4net.Config;
 using Photon.SocketServer;
+using PhotonMMOLib.UniverseStructure;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,6 +21,9 @@ namespace PhotonMMOLib
         public List<UnityClient> allClients = new List<UnityClient>();
 
         int lastClientsId = 0;
+
+        // World.
+        Universe MainUniverse = new Universe();
         
 
         // Действия при старте сервера.
@@ -38,6 +42,10 @@ namespace PhotonMMOLib
                 inst = this;
 
             Log.Debug("Server is setup!");
+
+            // TestUnverse.
+            MainUniverse.TestGalaxyInit();
+
         }
 
         // Создает пир всякий раз когда к серверу подключаеться клиент. Каждому клиенту свой пир.

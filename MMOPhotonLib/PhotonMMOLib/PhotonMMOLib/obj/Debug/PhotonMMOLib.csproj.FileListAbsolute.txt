@@ -22,3 +22,9 @@ C:\Users\Anrum Red\Downloads\MMOPhoton1\MMOPhoton1\MMOPhotonServer\deploy\Photon
 C:\Users\Anrum Red\Downloads\MMOPhoton1\MMOPhoton1\MMOPhotonLib\PhotonMMOLib\PhotonMMOLib\obj\Debug\PhotonMMOLib.csprojResolveAssemblyReference.cache
 C:\Users\Anrum Red\Downloads\MMOPhoton1\MMOPhoton1\MMOPhotonLib\PhotonMMOLib\PhotonMMOLib\obj\Debug\PhotonMMOLib.dll
 C:\Users\Anrum Red\Downloads\MMOPhoton1\MMOPhoton1\MMOPhotonLib\PhotonMMOLib\PhotonMMOLib\obj\Debug\PhotonMMOLib.pdb
+C:\Users\Mramid\Documents\GitHub\MMOPhoton1\MMOPhotonServer\deploy\PhotonMMO\bin\log4net.config
+C:\Users\Mramid\Documents\GitHub\MMOPhoton1\MMOPhotonServer\deploy\PhotonMMO\bin\PhotonMMOLib.dll
+C:\Users\Mramid\Documents\GitHub\MMOPhoton1\MMOPhotonServer\deploy\PhotonMMO\bin\PhotonMMOLib.pdb
+C:\Users\Mramid\Documents\GitHub\MMOPhoton1\MMOPhotonLib\PhotonMMOLib\PhotonMMOLib\obj\Debug\PhotonMMOLib.csprojResolveAssemblyReference.cache
+C:\Users\Mramid\Documents\GitHub\MMOPhoton1\MMOPhotonLib\PhotonMMOLib\PhotonMMOLib\obj\Debug\PhotonMMOLib.dll
+C:\Users\Mramid\Documents\GitHub\MMOPhoton1\MMOPhotonLib\PhotonMMOLib\PhotonMMOLib\obj\Debug\PhotonMMOLib.pdb
