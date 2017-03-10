@@ -14,6 +14,7 @@ namespace PhotonMMOLib
     public class Server : ApplicationBase
     {
         public static Server inst;
+        public DBManager database;
 
         // Получаем обьект логера. Через него будем писать лог.
         private readonly ILogger Log = LogManager.GetCurrentClassLogger();
@@ -21,6 +22,7 @@ namespace PhotonMMOLib
         public List<UnityClient> allClients = new List<UnityClient>();
 
         int lastClientsId = 0;
+
 
         // World.
         Universe MainUniverse = new Universe();
@@ -40,6 +42,8 @@ namespace PhotonMMOLib
 
             if (inst == null)
                 inst = this;
+
+            database = new DBManager();
 
             Log.Debug("Server is setup!");
 

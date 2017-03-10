@@ -39,6 +39,9 @@
     <Reference Include="log4net">
       <HintPath>..\..\..\MMOPhotonServer\lib\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="MySql.Data">
+      <HintPath>..\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Photon.SocketServer">
       <HintPath>..\..\..\MMOPhotonServer\lib\Photon.SocketServer.dll</HintPath>
     </Reference>
@@ -54,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DBManager.cs" />
     <Compile Include="UniverseStructure\BaseArea.cs" />
     <Compile Include="UniverseStructure\Orbit.cs" />
     <Compile Include="UniverseStructure\Planet.cs" />

@@ -7,6 +7,7 @@
         OtherPlayerEnterInGame,
         LoadAnotherPlayers,
         Move,
-
+        Login,
+        
     }
 }

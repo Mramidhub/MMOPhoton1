@@ -8,5 +8,6 @@ namespace PhotonMMO.Common
     public enum ErrorCode : Byte
     {
         NoError,
+        Login
     }
 }

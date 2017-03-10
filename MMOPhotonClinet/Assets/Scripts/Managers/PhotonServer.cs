@@ -164,6 +164,14 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
 
     // Запросы к серваку.
     #region Operations
+    public void Login(string login, string password)
+    {
+        PhotonPeer.OpCustom((byte)OperationCode.Login, new Dictionary<byte, object> {
+            { (byte)PropertiesCode.login, login},
+            { (byte)PropertiesCode.password, password}
+        }, true);
+    }
+
     public void EnterInGame()
     {
         PhotonPeer.OpCustom((byte)OperationCode.EnterInGame, new Dictionary<byte, object> {

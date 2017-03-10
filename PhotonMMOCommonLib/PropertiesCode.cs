@@ -11,5 +11,7 @@ namespace PhotonMMO.Common
         rotY,
         rotZ,
         rotW,
+        login,
+        password
     }
 }

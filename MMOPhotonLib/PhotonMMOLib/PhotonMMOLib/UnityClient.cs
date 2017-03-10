@@ -54,12 +54,38 @@ namespace PhotonMMOLib
                 case (byte)OperationCode.ExitGame:
                     ExitGame(operationRequest, sendParameters);
                     break;
+                case (byte)OperationCode.Login:
+                    LoginHandler(operationRequest, sendParameters);
+                    break;
                 default:
                     break;
             }
         }
 
         #region RequestsHandlers
+
+        void LoginHandler(OperationRequest operationRequest, SendParameters sendParameters)
+        {
+            string loginName = Convert.ToString(operationRequest.Parameters[(byte)PropertiesCode.login]);
+            string password = Convert.ToString(operationRequest.Parameters[(byte)PropertiesCode.password]);
+
+            if (Server.inst.database.Login(loginName, password))
+            {
+                OperationResponse response = new OperationResponse(operationRequest.OperationCode);
+                Log.Debug("login " + idClient);
+                response.Parameters = new Dictionary<byte, object> {{ (byte)ErrorCode.Login, "OK"} };
+
+                SendOperationResponse(response, sendParameters);
+            }
+            else
+            {
+                OperationResponse response = new OperationResponse(operationRequest.OperationCode);
+                response.Parameters = new Dictionary<byte, object> { { (byte)ErrorCode.Login, "NO" } };
+
+                SendOperationResponse(response, sendParameters);
+            }
+        }
+
         void InGameEntering(OperationRequest operationRequest, SendParameters sendParameters)
         {
             // Позиция.
