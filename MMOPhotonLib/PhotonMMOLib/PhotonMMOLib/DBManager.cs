@@ -3,31 +3,46 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MySql.Data.MySqlClient;
+using PhotonMMO.Common;
+using ExitGames.Logging;
 
 namespace PhotonMMOLib
 {
     public class DBManager
     {
-        //Переменная Connect - это строка подключения в которой:
-        //БАЗА - Имя базы в MySQL
-        //ХОСТ - Имя или IP-адрес сервера (если локально то можно и localhost)
-        //ПОЛЬЗОВАТЕЛЬ - Имя пользователя MySQL
-        //ПАРОЛЬ - говорит само за себя - пароль пользователя БД MySQL
-        string userID = "adminPhoton";
+        // Переменная Connect - это строка подключения в которой:
+        // БАЗА - Имя базы в MySQL
+        // ХОСТ - Имя или IP-адрес сервера (если локально то можно и localhost)
+        // ПОЛЬЗОВАТЕЛЬ - Имя пользователя MySQL
+        // ПАРОЛЬ - говорит само за себя - пароль пользователя БД MySQL
+        string userID = "root";
         string database = "MMOPhoton";
         string port = "3307";
         string password = "";
         string host = "localhost";
         string Connect = "";
 
+        // Запросы.
+        string getLogins = "SELECT login FROM accounts";
+        string getPasswords = "SELECT password FROM accounts WHERE login=";
+
         public static DBManager inst;
+
+        private readonly ILogger Log = LogManager.GetCurrentClassLogger();
 
         public void DBInit()
         {
             if (inst == null)
                 inst = this;
 
-            Connect = "Database=" + database + ";Data Source=" + host + ";User Id=" + userID + ";Password=" + password + "";
+            Log.Debug("Init DB");
+
+            //Connect = "Database=" + database + ";Data Source=" + host + ";User Id=" + userID + ";Password=" + password;
+            Connect = "server=" + host +
+               ";user=" + userID +
+               ";database=" + database +
+               ";port=" + port +
+               ";password=" + password + ";";
         }
 
         public void DBSet()
@@ -52,22 +67,65 @@ namespace PhotonMMOLib
             myConnection.Close(); //Обязательно закрываем соединение!
         }
 
-        public bool Login(string name, string pass)
+        public ErrorCode CheckLogin(string loginName, string pass)
         {
-            string CommandText = "Наш SQL скрипт";
+            List<string> loginList = new List<string>();
+            List<string> passwordList = new List<string>();
 
-            MySqlConnection myConnection = new MySqlConnection(Connect);
-            MySqlCommand myCommand = new MySqlCommand(CommandText, myConnection);
+            bool loginExisting = false;
+            bool passwordCorrect = false;
 
-            string result = myCommand.ExecuteScalar().ToString();
-
-            if (result == "true")
+            using (var connection = new MySqlConnection(Connect))
             {
-                return true;
+                connection.Open();
+                using (var cmd = new MySqlCommand(getLogins, connection))
+                {
+                    var login = cmd.ExecuteReader();
+                    while (login.Read())
+                    {
+                        for (int a = 0; a < login.FieldCount; a++)
+                        {
+                            if (login.GetString(a) == loginName)
+                            {
+                                Log.Debug("login " +loginName);
+                                loginExisting = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            using (var connection = new MySqlConnection(Connect))
+            {
+                connection.Open();
+                using (var cmd = new MySqlCommand(getPasswords + loginName, connection))
+                {
+                    var password = cmd.ExecuteScalar();
+
+                    if (password.ToString() == pass)
+                    {
+                        Log.Debug("pass " + pass);
+                        passwordCorrect = true;
+                    }
+                }
+            }
+
+            if (loginExisting && passwordCorrect)
+            {
+                return ErrorCode.NoError;
+            }
+            else if (loginExisting && !passwordCorrect)
+            {
+                return ErrorCode.WrongPassword;
+            }
+            else if (!loginExisting)
+            {
+                return ErrorCode.WrongLogin;
             }
             else
             {
-                return false;
+                return ErrorCode.WrongLogin;
             }
         }
     }

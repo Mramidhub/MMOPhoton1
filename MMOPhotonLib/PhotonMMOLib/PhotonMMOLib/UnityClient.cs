@@ -69,19 +69,30 @@ namespace PhotonMMOLib
             string loginName = Convert.ToString(operationRequest.Parameters[(byte)PropertiesCode.login]);
             string password = Convert.ToString(operationRequest.Parameters[(byte)PropertiesCode.password]);
 
-            if (Server.inst.database.Login(loginName, password))
+            Log.Debug("Login Error 1");
+
+            var resultLogin = Server.inst.database.CheckLogin(loginName, password);
+
+            if ((byte)resultLogin == (byte)ErrorCode.NoError)
             {
                 OperationResponse response = new OperationResponse(operationRequest.OperationCode);
                 Log.Debug("login " + idClient);
-                response.Parameters = new Dictionary<byte, object> {{ (byte)ErrorCode.Login, "OK"} };
-
+                response.Parameters = new Dictionary<byte, object> { { (byte)OperationCode.Login, ErrorCode.NoError } };
+                Log.Debug("Login Error 1" + ErrorCode.NoError);
                 SendOperationResponse(response, sendParameters);
             }
-            else
+            else if ((byte)resultLogin == (byte)ErrorCode.WrongLogin)
             {
                 OperationResponse response = new OperationResponse(operationRequest.OperationCode);
-                response.Parameters = new Dictionary<byte, object> { { (byte)ErrorCode.Login, "NO" } };
-
+                response.Parameters = new Dictionary<byte, object> { { (byte)OperationCode.Login, ErrorCode.WrongLogin } };
+                Log.Debug("Login Error 1" + ErrorCode.WrongLogin);
+                SendOperationResponse(response, sendParameters);
+            }
+            else if ((byte)resultLogin == (byte)ErrorCode.WrongPassword)
+            {
+                OperationResponse response = new OperationResponse(operationRequest.OperationCode);
+                response.Parameters = new Dictionary<byte, object> { { (byte)OperationCode.Login, ErrorCode.WrongPassword } };
+                Log.Debug("Login Error 1" + ErrorCode.WrongPassword);
                 SendOperationResponse(response, sendParameters);
             }
         }

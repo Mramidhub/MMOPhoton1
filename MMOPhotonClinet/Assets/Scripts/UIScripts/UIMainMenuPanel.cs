@@ -12,14 +12,19 @@ namespace Assets.Scripts.UIScripts
     {
         public Button EnterTheGame;
 
+        public Text login;
+        public Text password;
+
 
         void Awake()
         {
+            login.text = "";
+            password.text = "";
         }
 
-        public void EnterInGame()
+        public void Login()
         {
-            GameManager.Instance.EnterInGame();
+            GameManager.Instance.EnterInGame(login.text, password.text);
         }
     }
 }

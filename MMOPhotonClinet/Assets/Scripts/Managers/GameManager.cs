@@ -37,9 +37,9 @@ namespace Assets.Scripts.Managers
         {
         }
 
-        public void EnterInGame()
+        public void EnterInGame(string login, string password)
         {
-            PhotonServer.Instance.Connect();
+            PhotonServer.Instance.Login(login, password);
         }
 
         void InGameEnteringTrue()

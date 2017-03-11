@@ -48,6 +48,7 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
         // При старте создаем нового пира. Указываем экземпляр IPhoonPeerListener и вид протокола.
         PhotonPeer = new PhotonPeer(this, ConnectionProtocol.Udp);
         // Коннектимся к севраку.
+        Connect();
     }
 
     void Update()
@@ -98,6 +99,9 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
             case (byte)OperationCode.ExitGame:
                 ExitGameHandler(operationResponse);
                 break;
+            case (byte)OperationCode.Login:
+                LoginHandler(operationResponse);
+                break;
             default:
                 Debug.Log("Unknown OperationResponse:" + operationResponse.OperationCode);
                 break;
@@ -135,7 +139,6 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
         {
             case StatusCode.Connect:
                 Debug.Log("Connected to server!");
-                EnterInGame();
                 break;
             case StatusCode.Disconnect:
                 Debug.Log("Disconnected from server!");
@@ -166,6 +169,7 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
     #region Operations
     public void Login(string login, string password)
     {
+        Debug.Log("login");
         PhotonPeer.OpCustom((byte)OperationCode.Login, new Dictionary<byte, object> {
             { (byte)PropertiesCode.login, login},
             { (byte)PropertiesCode.password, password}
@@ -210,6 +214,24 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
 
     // Обработчики ответов от сервера и событий.
     #region RequestsAndEventsHadlers
+
+    void LoginHandler(OperationResponse operationResponse)
+    {
+        Debug.Log("1");
+
+        if ((byte)operationResponse.Parameters[(byte)OperationCode.Login] == (byte)ErrorCode.NoError)
+        {
+            EnterInGame();
+        }
+        else if ((byte)operationResponse.Parameters[(byte)OperationCode.Login] == (byte)ErrorCode.WrongLogin)
+        {
+            Debug.Log("Wrong Login");
+        }
+        else if ((byte)operationResponse.Parameters[(byte)OperationCode.Login] == (byte)ErrorCode.WrongPassword)
+        {
+            Debug.Log("Wrong Password");
+        }
+    }
 
     void InGameEnteringHandler(OperationResponse operationResponse)
     {

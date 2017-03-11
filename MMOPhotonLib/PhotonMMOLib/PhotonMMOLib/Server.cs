@@ -6,7 +6,6 @@ using PhotonMMOLib.UniverseStructure;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace PhotonMMOLib
@@ -44,6 +43,7 @@ namespace PhotonMMOLib
                 inst = this;
 
             database = new DBManager();
+            database.DBInit();
 
             Log.Debug("Server is setup!");
 
