@@ -57,13 +57,40 @@ namespace PhotonMMOLib
                 case (byte)OperationCode.Login:
                     LoginHandler(operationRequest, sendParameters);
                     break;
+                case (byte)OperationCode.Register:
+                    RegisterHandler(operationRequest, sendParameters);
+                    break;
                 default:
                     break;
             }
         }
 
         #region RequestsHandlers
+        void RegisterHandler(OperationRequest operationRequest, SendParameters sendParameters)
+        {
+            string loginName = Convert.ToString(operationRequest.Parameters[(byte)PropertiesCode.login]);
+            string password = Convert.ToString(operationRequest.Parameters[(byte)PropertiesCode.password]);
 
+            Log.Debug("Register");
+
+            var resultLogin = Server.inst.database.Register(loginName, password);
+
+            if ((byte)resultLogin == (byte)ErrorCode.NoError)
+            {
+                OperationResponse response = new OperationResponse(operationRequest.OperationCode);
+                Log.Debug("registr " + idClient);
+                response.Parameters = new Dictionary<byte, object> { { (byte)OperationCode.Login, ErrorCode.NoError } };
+                Log.Debug("Register Error 1" + ErrorCode.NoError);
+                SendOperationResponse(response, sendParameters);
+            }
+            else if ((byte)resultLogin == (byte)ErrorCode.UserExisting)
+            {
+                OperationResponse response = new OperationResponse(operationRequest.OperationCode);
+                response.Parameters = new Dictionary<byte, object> { { (byte)OperationCode.Login, ErrorCode.UserExisting } };
+                Log.Debug("Login Error 1" + ErrorCode.UserExisting);
+                SendOperationResponse(response, sendParameters);
+            }
+        }
         void LoginHandler(OperationRequest operationRequest, SendParameters sendParameters)
         {
             string loginName = Convert.ToString(operationRequest.Parameters[(byte)PropertiesCode.login]);

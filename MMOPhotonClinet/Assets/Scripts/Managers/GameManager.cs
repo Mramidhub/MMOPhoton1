@@ -37,6 +37,11 @@ namespace Assets.Scripts.Managers
         {
         }
 
+        public void Register(string login, string password)
+        {
+            PhotonServer.Instance.Register(login, password);
+        }
+
         public void EnterInGame(string login, string password)
         {
             PhotonServer.Instance.Login(login, password);

@@ -8,6 +8,6 @@
         LoadAnotherPlayers,
         Move,
         Login,
-        
+        Register
     }
 }

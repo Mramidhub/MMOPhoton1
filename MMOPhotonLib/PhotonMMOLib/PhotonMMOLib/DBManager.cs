@@ -25,6 +25,7 @@ namespace PhotonMMOLib
         // Запросы.
         string getLogins = "SELECT login FROM accounts";
         string getPasswords = "SELECT password FROM accounts WHERE login=";
+        string regAccount = "INSERT INTO accounts(login, password) VALUES ";
 
         public static DBManager inst;
 
@@ -67,10 +68,59 @@ namespace PhotonMMOLib
             myConnection.Close(); //Обязательно закрываем соединение!
         }
 
+        public ErrorCode Register(string loginName, string pass)
+        {
+            List<string> loginList = new List<string>();
+
+            bool loginExisting = false;
+            Log.Debug("1");
+            using (var connection = new MySqlConnection(Connect))
+            {
+                connection.Open();
+                using (var cmd = new MySqlCommand(getLogins, connection))
+                {
+                    var login = cmd.ExecuteReader();
+                    while (login.Read())
+                    {
+                        for (int a = 0; a < login.FieldCount; a++)
+                        {
+                            if (login.GetString(a) == loginName)
+                            {
+                                Log.Debug("login " + loginName);
+                                loginExisting = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            Log.Debug("2");
+            if (loginExisting)
+            {
+                return ErrorCode.UserExisting;
+            }
+
+            Log.Debug("3");
+            using (var connection = new MySqlConnection(Connect))
+            {
+                connection.Open();
+                using (var cmd = new MySqlCommand(regAccount + "('" + loginName + "','" + pass + "')", connection))
+                {
+                    var password = cmd.ExecuteNonQuery();
+
+                    if (password.ToString() == pass)
+                    {
+                        Log.Debug("pass row" + password);
+                    }
+                }
+            }
+            Log.Debug("4");
+            return ErrorCode.NoError;
+        }
+
         public ErrorCode CheckLogin(string loginName, string pass)
         {
             List<string> loginList = new List<string>();
-            List<string> passwordList = new List<string>();
 
             bool loginExisting = false;
             bool passwordCorrect = false;
@@ -99,7 +149,7 @@ namespace PhotonMMOLib
             using (var connection = new MySqlConnection(Connect))
             {
                 connection.Open();
-                using (var cmd = new MySqlCommand(getPasswords + loginName, connection))
+                using (var cmd = new MySqlCommand(getPasswords +"'"+loginName+"'", connection))
                 {
                     var password = cmd.ExecuteScalar();
 

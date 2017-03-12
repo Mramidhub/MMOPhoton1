@@ -102,6 +102,9 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
             case (byte)OperationCode.Login:
                 LoginHandler(operationResponse);
                 break;
+            case (byte)OperationCode.Register:
+                RegisterHandler(operationResponse);
+                break;
             default:
                 Debug.Log("Unknown OperationResponse:" + operationResponse.OperationCode);
                 break;
@@ -167,6 +170,14 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
 
     // Запросы к серваку.
     #region Operations
+    public void Register(string login, string password)
+    {
+        Debug.Log("register");
+        PhotonPeer.OpCustom((byte)OperationCode.Register, new Dictionary<byte, object> {
+            { (byte)PropertiesCode.login, login},
+            { (byte)PropertiesCode.password, password}
+        }, true);
+    }
     public void Login(string login, string password)
     {
         Debug.Log("login");
@@ -214,6 +225,20 @@ public class PhotonServer : MonoBehaviour, IPhotonPeerListener {
 
     // Обработчики ответов от сервера и событий.
     #region RequestsAndEventsHadlers
+
+    void RegisterHandler(OperationResponse operationResponse)
+    {
+        Debug.Log("1");
+
+        if ((byte)operationResponse.Parameters[(byte)OperationCode.Login] == (byte)ErrorCode.NoError)
+        {
+            Debug.Log("Register ok");
+        }
+        else if ((byte)operationResponse.Parameters[(byte)OperationCode.Login] == (byte)ErrorCode.UserExisting)
+        {
+            Debug.Log("User Exiting");
+        }
+    }
 
     void LoginHandler(OperationResponse operationResponse)
     {

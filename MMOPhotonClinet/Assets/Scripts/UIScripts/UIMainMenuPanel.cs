@@ -26,5 +26,10 @@ namespace Assets.Scripts.UIScripts
         {
             GameManager.Instance.EnterInGame(login.text, password.text);
         }
+
+        public void Register()
+        {
+            GameManager.Instance.Register(login.text, password.text);
+        }
     }
 }
