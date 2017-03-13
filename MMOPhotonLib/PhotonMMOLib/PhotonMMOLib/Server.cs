@@ -24,7 +24,7 @@ namespace PhotonMMOLib
 
 
         // World.
-        Universe MainUniverse = new Universe();
+        public Universe MainUniverse = new Universe();
         
 
         // Действия при старте сервера.
@@ -46,9 +46,6 @@ namespace PhotonMMOLib
             database.DBInit();
 
             Log.Debug("Server is setup!");
-
-            // TestUnverse.
-            MainUniverse.TestGalaxyInit();
 
         }
 

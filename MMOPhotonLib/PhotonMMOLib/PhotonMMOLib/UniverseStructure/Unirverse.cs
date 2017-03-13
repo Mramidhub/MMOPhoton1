@@ -10,22 +10,16 @@ namespace PhotonMMOLib
     {
         public List<Galaxy> allGalaxies = new List<Galaxy>();
 
-        public void TestGalaxyInit()
-        {
-            idArea = 1;
+        public List<Sector> allSectors = new List<Sector>();
 
-            allGalaxies.Add(new Galaxy());
-            allGalaxies[0].idArea = 1;
-            allGalaxies[0].allSectors.Add(new Sector());
-            allGalaxies[0].allSectors[0].idArea = 1;
-            allGalaxies[0].allSectors[0].allSystems.Add(new StarSystem());
-            allGalaxies[0].allSectors[0].allSystems[0].idArea = 1;
-            allGalaxies[0].allSectors[0].allSystems[0].allPlanets.Add(new Planet());
-            allGalaxies[0].allSectors[0].allSystems[0].allPlanets[0].idArea = 1;
-            allGalaxies[0].allSectors[0].allSystems[0].allPlanets[0].allPlanetAreas.Add(new PlanetArea());
-            allGalaxies[0].allSectors[0].allSystems[0].allPlanets[0].allPlanetAreas[0].idArea = 1;
-            allGalaxies[0].allSectors[0].allSystems[0].allPlanets[0].allPlanetAreas.Add(new PlanetArea());
-            allGalaxies[0].allSectors[0].allSystems[0].allPlanets[0].allPlanetAreas[1].idArea = 2;
-        }
+        public List<StarSystem> allSystems = new List<StarSystem>();
+
+        public List<Orbit> allOrbits = new List<Orbit>();
+
+        public List<Planet> allPlanet = new List<Planet>();
+
+        public List<Space> allSpaces = new List<Space>();
+
+        public List<PlanetArea> allPlanetAres = new List<PlanetArea>();
     }
 }

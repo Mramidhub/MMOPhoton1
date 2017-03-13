@@ -7,6 +7,7 @@ using PhotonHostRuntimeInterfaces;
 using ExitGames.Logging;
 using PhotonMMO.Common;
 using TestPhotonLib.Operations;
+using PhotonMMOLib.UniverseStructure;
 
 namespace PhotonMMOLib
 {
@@ -19,9 +20,18 @@ namespace PhotonMMOLib
         // id.
         public int idClient = 0;
 
+        public string login;
+        public string password;
+
         // Postion - rotation.
         Vector3DPosition position = new Vector3DPosition();
         QuaternionRotation rotation = new QuaternionRotation();
+
+        public BaseArea currentArea;
+        public string currentCharacterId;
+        public string currentCharacterName;
+        public string currentCharacterArea;
+
 
         public UnityClient(IRpcProtocol protocol, IPhotonPeer unmanagedPeer, int id) : base(protocol, unmanagedPeer)
         {
@@ -91,14 +101,15 @@ namespace PhotonMMOLib
                 SendOperationResponse(response, sendParameters);
             }
         }
+
         void LoginHandler(OperationRequest operationRequest, SendParameters sendParameters)
         {
             string loginName = Convert.ToString(operationRequest.Parameters[(byte)PropertiesCode.login]);
-            string password = Convert.ToString(operationRequest.Parameters[(byte)PropertiesCode.password]);
+            string pass = Convert.ToString(operationRequest.Parameters[(byte)PropertiesCode.password]);
 
             Log.Debug("Login Error 1");
 
-            var resultLogin = Server.inst.database.CheckLogin(loginName, password);
+            var resultLogin = Server.inst.database.CheckLogin(loginName, pass);
 
             if ((byte)resultLogin == (byte)ErrorCode.NoError)
             {
@@ -107,6 +118,9 @@ namespace PhotonMMOLib
                 response.Parameters = new Dictionary<byte, object> { { (byte)OperationCode.Login, ErrorCode.NoError } };
                 Log.Debug("Login Error 1" + ErrorCode.NoError);
                 SendOperationResponse(response, sendParameters);
+                password = pass;
+                login = loginName;
+                
             }
             else if ((byte)resultLogin == (byte)ErrorCode.WrongLogin)
             {
@@ -126,6 +140,17 @@ namespace PhotonMMOLib
 
         void InGameEntering(OperationRequest operationRequest, SendParameters sendParameters)
         {
+            // Получаем данные об игроке из базы.
+
+            //var dataChar = DBManager.inst.GetDataCharacter(login);
+
+            //if (dataChar != null)
+            //{
+            //    currentCharacterId = dataChar["id"];
+            //    currentCharacterName = dataChar["name"];
+            //    currentCharacterId = dataChar["currentarea"];
+            //}
+
             // Позиция.
 
             float x = Convert.ToSingle(operationRequest.Parameters[(byte)PropertiesCode.posX]);

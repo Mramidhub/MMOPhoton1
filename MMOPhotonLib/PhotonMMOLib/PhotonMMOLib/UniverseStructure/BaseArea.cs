@@ -7,6 +7,12 @@ namespace PhotonMMOLib.UniverseStructure
 {
     public class BaseArea
     {
-        public int idArea;
+        public string idArea;
+
+        public string nameArea;
+
+        public string idParent;
+
+        public List<UnityClient> players = new List<UnityClient>();
     }
 }
