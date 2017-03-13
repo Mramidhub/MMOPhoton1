@@ -67,20 +67,5 @@ namespace PhotonMMOLib
             Log.Debug("Server was soped!");
         }
 
-        // Выборка клиентов всех кроме какого то id.
-        public List<UnityClient> AllBeyondId(int id)
-        {
-            var clients = new List<UnityClient>();
-
-            foreach (UnityClient client in allClients)
-            {
-                if (client.idClient != id)
-                {
-                    clients.Add(client);
-                }
-            }
-
-            return clients;
-        }
     }
 }

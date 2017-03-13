@@ -21,7 +21,7 @@ namespace PhotonMMOLib
         #endregion
 
         #region DBRequests
-        string getLogins = "SELECT login FROM accou nts";
+        string getLogins = "SELECT login FROM accounts";
         string getPasswords = "SELECT password FROM accounts WHERE login=";
         string regAccount = "INSERT INTO accounts(login, password) VALUES ";
 
@@ -412,9 +412,9 @@ namespace PhotonMMOLib
                     var dataCharacter = cmd.ExecuteReader();
                     while (dataCharacter.Read())
                     {
-                        data.Add("id", dataCharacter.GetString(0));
-                        data.Add("name", dataCharacter.GetString(1));
-                        data.Add("currentarea", dataCharacter.GetString(2));
+                        data.Add("id", dataCharacter.GetString("id"));
+                        data.Add("name", dataCharacter.GetString("name"));
+                        data.Add("currentarea", dataCharacter.GetString("currentarea"));
                     }
                 }
             }
@@ -422,7 +422,6 @@ namespace PhotonMMOLib
             return data;
 
         }
-
 
         BaseArea getAreaForID(List<BaseArea> areas, string id)
         {
@@ -438,7 +437,5 @@ namespace PhotonMMOLib
 
             return baseAreas[0];
         }
-
-        
     }
 }

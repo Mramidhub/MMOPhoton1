@@ -31,18 +31,22 @@ namespace PhotonMMOLib
         public string currentCharacterId;
         public string currentCharacterName;
         public string currentCharacterArea;
+        public string currentCharacterAreaID;
+        public string currentCharacterAreaType;
+
+        List<UnityClient> allClientsCurrentArea = new List<UnityClient>();
 
 
         public UnityClient(IRpcProtocol protocol, IPhotonPeer unmanagedPeer, int id) : base(protocol, unmanagedPeer)
         {
-            Log.Debug("Client ip:" + unmanagedPeer.GetRemoteIP());
+            Log.Debug("Client ip: " + unmanagedPeer.GetRemoteIP());
             idClient = id;
         }
 
         // Когда клиент отключается.
         protected override void OnDisconnect(DisconnectReason reasonCode, string reasonDetail)
         {
-            Server.inst.allClients.Remove(this);
+            allClientsCurrentArea.Remove(this);
             Log.Debug("Client disconnected");
         }
 
@@ -141,18 +145,20 @@ namespace PhotonMMOLib
         void InGameEntering(OperationRequest operationRequest, SendParameters sendParameters)
         {
             // Получаем данные об игроке из базы.
+            var dataChar = DBManager.inst.GetDataCharacter(login);
 
-            //var dataChar = DBManager.inst.GetDataCharacter(login);
+            if (dataChar != null)
+            {
+                currentCharacterId = dataChar["id"];
+                currentCharacterName = dataChar["name"];
+                currentCharacterArea= dataChar["currentarea"];
+            }
 
-            //if (dataChar != null)
-            //{
-            //    currentCharacterId = dataChar["id"];
-            //    currentCharacterName = dataChar["name"];
-            //    currentCharacterId = dataChar["currentarea"];
-            //}
+            // Обновляем данные персонажа.
+            RefreshCharData();
 
+            Log.Debug(" idchar " + currentCharacterId + " name " + currentCharacterName + " currentarrea " + currentCharacterArea);
             // Позиция.
-
             float x = Convert.ToSingle(operationRequest.Parameters[(byte)PropertiesCode.posX]);
             float y = Convert.ToSingle(operationRequest.Parameters[(byte)PropertiesCode.posY]);
             float z = Convert.ToSingle(operationRequest.Parameters[(byte)PropertiesCode.posZ]);
@@ -173,9 +179,9 @@ namespace PhotonMMOLib
 
             SendOperationResponse(response, sendParameters);
             // Событие остальным.
-            var clients = Server.inst.allClients;
+            var clients = allClientsCurrentArea;
 
-            Log.Debug("clients count " + Server.inst.allClients.Count);
+            Log.Debug("clients count " + allClientsCurrentArea.Count);
 
             var eventData1 = new EventData((byte)EventCode.OtherPlayerEnterInGame);
 
@@ -186,15 +192,15 @@ namespace PhotonMMOLib
                         { (byte)PropertiesCode.idClient, idClient }
                     };
 
-            eventData1.SendTo(Server.inst.allClients, sendParameters);
+            eventData1.SendTo(allClientsCurrentArea, sendParameters);
         }
 
         void AnotherPlayersLoading(OperationRequest operationRequest, SendParameters sendParameters)
         {
             Log.Debug("another load0");
-            for (int a = 0; a < Server.inst.allClients.Count; a++)
+            for (int a = 0; a < allClientsCurrentArea.Count; a++)
             {
-                var client = Server.inst.allClients[a];
+                var client = allClientsCurrentArea[a];
 
                 OperationResponse response = new OperationResponse(operationRequest.OperationCode);
 
@@ -241,7 +247,7 @@ namespace PhotonMMOLib
             sendParameters.Unreliable = false;
 
             // Отправляем событие все, кроме вызвающего.
-            eventDataMove.SendTo(Server.inst.AllBeyondId(idClient), sendParameters);
+            eventDataMove.SendTo(AllBeyondId(idClient), sendParameters);
         }
 
         void ExitGame(OperationRequest operationRequest, SendParameters sendParameters)
@@ -257,17 +263,102 @@ namespace PhotonMMOLib
 
             eventData1.Parameters = new Dictionary<byte, object> {{ (byte)PropertiesCode.idClient, idClient }};
 
-            eventData1.SendTo(Server.inst.AllBeyondId(idClient), sendParameters);
+            eventData1.SendTo(AllBeyondId(idClient), sendParameters);
 
-            Log.Debug("clients " + Server.inst.allClients.Count);
+            Log.Debug("clients " + allClientsCurrentArea.Count);
 
-            Server.inst.allClients.Remove(this);
+            allClientsCurrentArea.Remove(this);
 
-            Log.Debug("clients " + Server.inst.allClients.Count);
+            Log.Debug("clients " + allClientsCurrentArea.Count);
 
         }
 
+        void RefreshCharData()
+        {
+            char splitChar = (':');
+
+            string[] area = currentCharacterArea.Split(splitChar);
+
+            currentCharacterAreaID = area[1];
+            currentCharacterAreaType = area[0];
+
+            switch (currentCharacterAreaType)
+            {
+                case "sectors":
+                    foreach (BaseArea sector in Server.inst.MainUniverse.allSectors)
+                    {
+                        if (currentCharacterAreaID == sector.idArea)
+                        {
+                            allClientsCurrentArea = sector.players;
+                            allClientsCurrentArea.Add(this);
+                        }
+                    }
+                    break;
+                case "systems":
+                    foreach (BaseArea systemstar in Server.inst.MainUniverse.allSystems)
+                    {
+                        if (currentCharacterAreaID == systemstar.idArea)
+                        {
+                            allClientsCurrentArea = systemstar.players;
+                            allClientsCurrentArea.Add(this);
+                        }
+                    }
+                    break;
+                case "planets":
+                    foreach (BaseArea planet in Server.inst.MainUniverse.allPlanet)
+                    {
+                        if (currentCharacterAreaID == planet.idArea)
+                        {
+                            allClientsCurrentArea = planet.players;
+                            allClientsCurrentArea.Add(this);
+                        }
+                    }
+                    break;
+                case "orbits":
+                    foreach (BaseArea orbit in Server.inst.MainUniverse.allOrbits)
+                    {
+                        if (currentCharacterAreaID == orbit.idArea)
+                        {
+                            allClientsCurrentArea = orbit.players;
+                            allClientsCurrentArea.Add(this);
+                        }
+                    }
+                    break;
+                case "planetareas":
+                    foreach (BaseArea planetarea in Server.inst.MainUniverse.allPlanetAres)
+                    {
+                        Log.Debug("planet areas 1 ");
+                        if (currentCharacterAreaID == planetarea.idArea)
+                        {
+                            allClientsCurrentArea = planetarea.players;
+                            allClientsCurrentArea.Add(this);
+
+                            Log.Debug("planet areas 2 " + allClientsCurrentArea.Count);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
         #endregion
+
+        // Выборка клиентов всех кроме какого то id.
+        public List<UnityClient> AllBeyondId(int id)
+        {
+            var clients = new List<UnityClient>();
+
+            foreach (UnityClient client in allClientsCurrentArea)
+            {
+                if (client.idClient != id)
+                {
+                    clients.Add(client);
+                }
+            }
+
+            return clients;
+        }
     }
 }
 
