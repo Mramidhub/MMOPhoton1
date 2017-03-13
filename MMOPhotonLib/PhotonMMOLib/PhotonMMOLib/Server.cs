@@ -45,6 +45,8 @@ namespace PhotonMMOLib
             database = new DBManager();
             database.DBInit();
 
+            database.InitUniverse();
+
             Log.Debug("Server is setup!");
 
         }

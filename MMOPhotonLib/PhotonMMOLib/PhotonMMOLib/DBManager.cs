@@ -30,6 +30,7 @@ namespace PhotonMMOLib
         string getAllGalaxies = "SELECT * FROM galaxies";
         string getAllSectors = "SELECT * FROM sectors";
         string getAllSystems = "SELECT * FROM systems";
+        string getAllOrbits = "SELECT * FROM orbits";
         string getAllPlanets= "SELECT * FROM planets";
         string getAllPlanetsAreas = "SELECT * FROM planetareas";
 
@@ -123,7 +124,16 @@ namespace PhotonMMOLib
 
                         newSector.idParent = sectors.GetString(2);
 
-                        Galaxy galaxy = getAreaForID(Server.inst.MainUniverse.allGalaxies, newSector.idParent) as Galaxy;
+                        Log.Debug("galaxies " + Server.inst.MainUniverse.allGalaxies.Count);
+
+                        List<BaseArea> tempList = new List<BaseArea>();
+
+                        foreach (var area in Server.inst.MainUniverse.allGalaxies)
+                        {
+                            tempList.Add(area);
+                        }
+
+                        Galaxy galaxy = getAreaForID(tempList, newSector.idParent) as Galaxy;
 
                         galaxy.allSectors.Add(newSector);
 
@@ -138,7 +148,7 @@ namespace PhotonMMOLib
             using (var connection = new MySqlConnection(Connect))
             {
                 connection.Open();
-                using (var cmd = new MySqlCommand(getAllSectors, connection))
+                using (var cmd = new MySqlCommand(getAllSystems, connection))
                 {
                     var sectors = cmd.ExecuteReader();
                     while (sectors.Read())
@@ -151,7 +161,14 @@ namespace PhotonMMOLib
 
                         newSystem.idParent = sectors.GetString(2);
 
-                        Sector sector = getAreaForID(Server.inst.MainUniverse.allSectors, newSystem.idParent) as Sector;
+                        List<BaseArea> tempList = new List<BaseArea>();
+
+                        foreach (var area in Server.inst.MainUniverse.allSectors)
+                        {
+                            tempList.Add(area);
+                        }
+
+                        Sector sector = getAreaForID(tempList, newSystem.idParent) as Sector;
 
                         sector.allSystems.Add(newSystem);
 
@@ -166,7 +183,7 @@ namespace PhotonMMOLib
             using (var connection = new MySqlConnection(Connect))
             {
                 connection.Open();
-                using (var cmd = new MySqlCommand(getAllSectors, connection))
+                using (var cmd = new MySqlCommand(getAllPlanets, connection))
                 {
                     var sectors = cmd.ExecuteReader();
                     while (sectors.Read())
@@ -179,7 +196,14 @@ namespace PhotonMMOLib
 
                         newPlanet.idParent = sectors.GetString(2);
 
-                        StarSystem planet = getAreaForID(Server.inst.MainUniverse.allSystems, newPlanet.idParent) as StarSystem;
+                        List<BaseArea> tempList = new List<BaseArea>();
+
+                        foreach (var area in Server.inst.MainUniverse.allSystems)
+                        {
+                            tempList.Add(area);
+                        }
+
+                        StarSystem planet = getAreaForID(tempList, newPlanet.idParent) as StarSystem;
 
                         planet.allPlanets.Add(newPlanet);
 
@@ -189,17 +213,17 @@ namespace PhotonMMOLib
             }
             #endregion
 
-            // Получаем список систем и создаем их.
+            // Получаем список орбит и создаем их.
             #region CreateOrbits
             using (var connection = new MySqlConnection(Connect))
             {
                 connection.Open();
-                using (var cmd = new MySqlCommand(getAllSectors, connection))
+                using (var cmd = new MySqlCommand(getAllOrbits, connection))
                 {
                     var sectors = cmd.ExecuteReader();
                     while (sectors.Read())
                     {
-                        var newOrbit= new Orbit();
+                        var newOrbit = new Orbit();
 
                         newOrbit.idArea = sectors.GetInt32(0).ToString();
 
@@ -207,7 +231,14 @@ namespace PhotonMMOLib
 
                         newOrbit.idParent = sectors.GetString(2);
 
-                        StarSystem starsystem = getAreaForID(Server.inst.MainUniverse.allSystems, newOrbit.idParent) as StarSystem;
+                        List<BaseArea> tempList = new List<BaseArea>();
+
+                        foreach (var area in Server.inst.MainUniverse.allSystems)
+                        {
+                            tempList.Add(area);
+                        }
+
+                        StarSystem starsystem = getAreaForID(tempList, newOrbit.idParent) as StarSystem;
 
                         starsystem.allOrbits.Add(newOrbit);
 
@@ -216,6 +247,50 @@ namespace PhotonMMOLib
                 }
             }
             #endregion
+
+            // Получаем список планетарныхучастков и создаем их.
+            #region PlanetAreas
+            using (var connection = new MySqlConnection(Connect))
+            {
+                connection.Open();
+                using (var cmd = new MySqlCommand(getAllPlanetsAreas, connection))
+                {
+                    var planetArea = cmd.ExecuteReader();
+                    while (planetArea.Read())
+                    {
+                        var newArea = new PlanetArea();
+
+                        newArea.idArea = planetArea.GetInt32(0).ToString();
+
+                        newArea.nameArea = planetArea.GetString(1);
+
+                        newArea.idParent = planetArea.GetString(2);
+
+                        List<BaseArea> tempList = new List<BaseArea>();
+
+                        foreach (var area in Server.inst.MainUniverse.allPlanet)
+                        {
+                            tempList.Add(area);
+                        }
+
+                        Planet planet = getAreaForID(tempList, newArea.idParent) as Planet;
+
+                        planet.allPlanetAreas.Add(newArea);
+
+                        Server.inst.MainUniverse.allPlanetAres.Add(newArea);
+                    }
+                }
+            }
+            #endregion
+
+            Log.Debug(
+                " Galaxies " + Server.inst.MainUniverse.allGalaxies.Count
+               + " Sectors " + Server.inst.MainUniverse.allSectors.Count
+               + " Systems " + Server.inst.MainUniverse.allSystems.Count
+               + " Orbits " + Server.inst.MainUniverse.allOrbits.Count
+               + " Planets " + Server.inst.MainUniverse.allPlanet.Count
+               + " PlanetAreas " + Server.inst.MainUniverse.allPlanetAres.Count
+                );
         }
 
         public ErrorCode Register(string loginName, string pass)
@@ -349,11 +424,11 @@ namespace PhotonMMOLib
         }
 
 
-        BaseArea getAreaForID(object areas, string id)
+        BaseArea getAreaForID(List<BaseArea> areas, string id)
         {
             var baseAreas = areas as List<BaseArea>;
 
-            foreach (BaseArea area in baseAreas)
+            foreach (BaseArea area in areas)
             {
                 if (area.idArea == id)
                 {
@@ -363,5 +438,7 @@ namespace PhotonMMOLib
 
             return baseAreas[0];
         }
+
+        
     }
 }
